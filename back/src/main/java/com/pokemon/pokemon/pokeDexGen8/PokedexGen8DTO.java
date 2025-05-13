@@ -1,5 +1,8 @@
 package com.pokemon.pokemon.pokeDexGen8;
 
+import lombok.Data;
+
+@Data
 public class PokedexGen8DTO {
 
     private int id;
