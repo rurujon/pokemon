@@ -1,5 +1,5 @@
 package com.pokemon.pokemon.pokeDexGen8;
 
-public class PokedexGen8Service {
-    
+public interface PokedexGen8Service {
+    void savePokemon(PokedexGen8DTO dto);
 }
