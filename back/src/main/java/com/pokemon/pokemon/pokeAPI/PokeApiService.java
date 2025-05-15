@@ -8,8 +8,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.pokemon.pokemon.pokeDexGen8.PokedexGen8DTO;
-import com.pokemon.pokemon.pokeDexGen9.PokedexGen9DTO;
+import com.pokemon.pokemon.pokeDex.PokedexDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,15 +18,15 @@ public class PokeApiService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public List<PokedexGen8DTO> fetchGen8PokemonList() {
-        return fetchPokemonListFromPokedex("galar");
+    public List<PokedexDTO> fetchGen8PokemonList() {
+        return fetchPokemonList("galar");
     }
 
-    public List<PokedexGen9DTO> fetchGen9PokemonList() {
-        return fetchPokemonListFromPokedex("paldea");
+    public List<PokedexDTO> fetchGen9PokemonList() {
+        return fetchPokemonList("paldea");
     }
 
-    private <T> List<T> fetchPokemonListFromPokedex(String regionName) {
+    private <T> List<T> fetchPokemonList(String regionName) {
         List<T> resultList = new ArrayList<>();
 
         String pokedexUrl = "https://pokeapi.co/api/v2/pokedex/" + regionName;
@@ -67,37 +66,20 @@ public class PokeApiService {
 
             String imageUrl = (String) ((Map<String, Object>) details.get("sprites")).get("front_default");
 
-            if ("galar".equals(regionName)) {
-                PokedexGen8DTO dto = new PokedexGen8DTO();
-                dto.setId(index++);
-                dto.setNameKor(nameKor);
-                dto.setNameEng(nameEng);
-                dto.setType1(type1);
-                dto.setType2(type2);
-                dto.setHp((Integer) stats.get("hp"));
-                dto.setAttack((Integer) stats.get("attack"));
-                dto.setDefense((Integer) stats.get("defense"));
-                dto.setSpAttack((Integer) stats.get("special-attack"));
-                dto.setSpDefense((Integer) stats.get("special-defense"));
-                dto.setSpeed((Integer) stats.get("speed"));
-                dto.setImageUrl(imageUrl);
-                resultList.add((T) dto);
-            } else {
-                PokedexGen9DTO dto = new PokedexGen9DTO();
-                dto.setId(index++);
-                dto.setNameKor(nameKor);
-                dto.setNameEng(nameEng);
-                dto.setType1(type1);
-                dto.setType2(type2);
-                dto.setHp((Integer) stats.get("hp"));
-                dto.setAttack((Integer) stats.get("attack"));
-                dto.setDefense((Integer) stats.get("defense"));
-                dto.setSpAttack((Integer) stats.get("special-attack"));
-                dto.setSpDefense((Integer) stats.get("special-defense"));
-                dto.setSpeed((Integer) stats.get("speed"));
-                dto.setImageUrl(imageUrl);
-                resultList.add((T) dto);
-            }
+            PokedexDTO dto = new PokedexDTO();
+            dto.setId(index++);
+            dto.setNameKor(nameKor);
+            dto.setNameEng(nameEng);
+            dto.setType1(type1);
+            dto.setType2(type2);
+            dto.setHp((Integer) stats.get("hp"));
+            dto.setAttack((Integer) stats.get("attack"));
+            dto.setDefense((Integer) stats.get("defense"));
+            dto.setSpAttack((Integer) stats.get("special-attack"));
+            dto.setSpDefense((Integer) stats.get("special-defense"));
+            dto.setSpeed((Integer) stats.get("speed"));
+            dto.setImageUrl(imageUrl);
+            resultList.add((T) dto);
         }
 
         return resultList;

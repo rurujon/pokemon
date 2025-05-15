@@ -1,9 +1,9 @@
-package com.pokemon.pokemon.pokeDexGen9;
+package com.pokemon.pokemon.pokeDex;
 
 import lombok.Data;
 
 @Data
-public class PokedexGen9DTO {
+public class PokedexDTO {
 
     private int id;
     private String nameKor; // 한국어 이름
