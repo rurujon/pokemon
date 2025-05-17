@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pokemon.pokemon.pokeDex.PokedexMapper">
+
+    <insert id="insertGen8" parameterType="PokedexDTO">
+        INSERT INTO gen8 (
+            id, name_kor, name_eng, type1, type2,
+            hp, attack, defense, sp_attack, sp_defense, speed, image_url
+        ) VALUES (
+            #{id}, #{nameKor}, #{nameEng}, #{type1}, #{type2},
+            #{hp}, #{attack}, #{defense}, #{spAttack}, #{spDefense}, #{speed}, #{imageUrl}
+        )
+    </insert>
+
+    <insert id="insertGen9" parameterType="PokedexDTO">
+        INSERT INTO gen9 (
+            id, name_kor, name_eng, type1, type2, hp, attack, defense, sp_attack, sp_defense, speed, image_url
+        ) VALUES (
+            #{id}, #{nameKor}, #{nameEng}, #{type1}, #{type2},
+            #{hp}, #{attack}, #{defense}, #{spAttack}, #{spDefense}, #{speed}, #{imageUrl}
+        )
+    </insert>
+
+</mapper>

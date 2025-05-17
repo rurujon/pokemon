@@ -35,19 +35,26 @@ public class PokeApiService {
 
         int index = 1;
         for (Map<String, Object> entry : entries) {
-            Map<String, String> pokemon = (Map<String, String>) entry.get("pokemon_species");
-            String nameEng = pokemon.get("name");
+            Map<String, Object> pokemon = (Map<String, Object>) entry.get("pokemon_species");
+            String nameEng = (String) pokemon.get("name");
+            Integer regionNo = (Integer) entry.get("entry_number");
+
 
             // API 호출: 포켓몬 상세 정보
-            Map<String, Object> details = restTemplate.getForObject("https://pokeapi.co/api/v2/pokemon/" + nameEng, Map.class);
             Map<String, Object> species = restTemplate.getForObject("https://pokeapi.co/api/v2/pokemon-species/" + nameEng, Map.class);
 
+            Integer pokedexNo = (Integer) species.get("id");
             List<Map<String, Object>> names = (List<Map<String, Object>>) species.get("names");
             String nameKor = names.stream()
                 .filter(n -> "ko".equals(((Map<String, Object>) n.get("language")).get("name")))
                 .map(n -> (String) n.get("name"))
                 .findFirst()
                 .orElse(nameEng); // fallback
+
+
+            List<Map<String, Object>> varieties = (List<Map<String, Object>>) species.get("varieties");
+            
+            Map<String, Object> details = restTemplate.getForObject("https://pokeapi.co/api/v2/pokemon/" + nameEng, Map.class);
 
             List<Map<String, Object>> types = (List<Map<String, Object>>) details.get("types");
             String type1 = null, type2 = null;
