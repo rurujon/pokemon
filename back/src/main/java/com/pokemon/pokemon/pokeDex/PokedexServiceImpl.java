@@ -37,4 +37,10 @@ public class PokedexServiceImpl implements PokedexService {
 
         return list.size();
     }
+    
+    @Override
+    public List<PokedexDTO> getPokedexByGeneration(int generation) {
+        // TODO Auto-generated method stub
+        return pokedexMapper.getPokedexByGeneration(generation);
+    }
 }

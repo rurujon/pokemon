@@ -1,7 +1,10 @@
 package com.pokemon.pokemon.pokeDex;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,5 +24,10 @@ public class PokedexController {
     public ResponseEntity<String> saveByGen(@RequestParam("gen") int generation) {
         int count = pokedexService.savePokemonByGeneration(generation);
         return ResponseEntity.ok("Generation " + generation + " 포켓몬 " + count + "마리 저장 완료");
+    }
+
+    @GetMapping("/list")
+    public List<PokedexDTO> getPokedexList(@RequestParam int gen) {
+        return pokedexService.getPokedexByGeneration(gen);
     }
 }

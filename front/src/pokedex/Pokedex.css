@@ -1,0 +1,129 @@
+.pokedex-wrapper {
+  padding: 2rem;
+  text-align: center;
+}
+
+.tab-buttons button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  background-color: #eee;
+  cursor: pointer;
+}
+
+.tab-buttons .active {
+  background-color: #007bff;
+  color: white;
+}
+
+.upload-button {
+  margin-top: 1rem;
+}
+
+.upload-button .message {
+  margin-top: 10px;
+  color: green;
+  font-weight: bold;
+}
+
+.pokedex-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.pokedex-card {
+  background: #f9f9f9;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.pokedex-card:hover {
+  transform: scale(1.05);
+}
+
+.pokedex-card.selected {
+  border: 3px solid #007bff;
+  transform: scale(1.1);
+  z-index: 10;
+}
+
+.pokedex-card img {
+  width: 100px;
+  height: 100px;
+}
+
+.types {
+  margin-top: 0.5rem;
+}
+
+.type {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  margin: 0 0.2rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  color: white;
+  font-weight: bold;
+}
+
+/* 타입 색상 예시 */
+.type.fire { background-color: #F08030; }
+.type.water { background-color: #6890F0; }
+.type.grass { background-color: #78C850; }
+.type.electric { background-color: #F8D030; }
+.type.ice { background-color: #98D8D8; }
+.type.fighting { background-color: #C03028; }
+.type.poison { background-color: #A040A0; }
+.type.ground { background-color: #E0C068; }
+.type.flying { background-color: #A890F0; }
+.type.psychic { background-color: #F85888; }
+.type.bug { background-color: #A8B820; }
+.type.rock { background-color: #B8A038; }
+.type.ghost { background-color: #705898; }
+.type.dark { background-color: #705848; }
+.type.dragon { background-color: #7038F8; }
+.type.steel { background-color: #B8B8D0; }
+.type.fairy { background-color: #EE99AC; }
+.type.normal { background-color: #A8A878; }
+
+.pokedex-detail {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: #fff;
+  border: 2px solid #007bff;
+  border-radius: 10px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.pokedex-detail img {
+  width: 150px;
+  display: block;
+  margin: 1rem auto;
+}
+
+.pokedex-detail button {
+  display: block;
+  margin: 1rem auto;
+  padding: 0.5rem 1rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}

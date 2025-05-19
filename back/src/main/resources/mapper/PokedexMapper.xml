@@ -30,4 +30,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         )
     </insert>
 
+    <select id="getPokedexByGeneration" resultType="com.pokemon.pokemon.pokeDex.PokedexDTO">
+        <choose>
+            <when test="generation == 8">
+                SELECT * FROM gen8
+            </when>
+            <when test="generation == 9">
+                SELECT * FROM gen9
+            </when>
+            <otherwise>
+                SELECT * FROM gen8
+            </otherwise>
+        </choose>
+    </select>
+
 </mapper>
