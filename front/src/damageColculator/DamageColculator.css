@@ -1,0 +1,103 @@
+.calculator-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  font-family: sans-serif;
+}
+
+.generation-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  background-color: #eee;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.tab.active {
+  background-color: #4285f4;
+  color: white;
+  font-weight: bold;
+}
+
+.explanation-box {
+  background-color: #fff8dc;
+  border: 1px solid #f0e68c;
+  padding: 16px;
+  margin-bottom: 24px;
+  border-radius: 6px;
+}
+
+.explanation-box h2 {
+  margin: 0 0 10px;
+}
+
+.small-text {
+  font-size: 12px;
+  color: #666;
+  margin-top: 6px;
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+}
+
+.panel {
+  border: 1px solid #ccc;
+  padding: 16px;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+}
+
+.panel h3 {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.placeholder {
+  text-align: center;
+  font-size: 14px;
+  color: #999;
+}
+
+.pokemon-image {
+  width: 96px;
+  height: 96px;
+  display: block;
+  margin: 10px auto;
+}
+
+.stat-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.stat-controls label {
+  font-size: 14px;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.stat-row label {
+  min-width: 70px;
+  font-weight: bold;
+}
+
+.stat-row input,
+.stat-row select {
+  width: 60px;
+}
