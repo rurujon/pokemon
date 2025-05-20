@@ -1,0 +1,64 @@
+.selector-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+}
+
+.pokemon-list {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  text-align: left;  /* ✅ 좌측 정렬 */
+}
+
+.pokemon-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;  /* ✅ 좌측 정렬 */
+  padding: 8px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.pokemon-item:hover {
+  background-color: #f9f9f9;
+}
+
+.pokemon-image-selector {
+  width: 40px;
+  height: 40px;
+  margin-right: 12px;
+}
+
+.pokemon-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.pokemon-name {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.pokemon-no {
+  font-size: 12px;
+  color: #666;
+}
+
+.no-result {
+  padding: 10px;
+  text-align: center;
+  color: #999;
+}

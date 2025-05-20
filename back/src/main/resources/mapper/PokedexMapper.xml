@@ -33,13 +33,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="getPokedexByGeneration" resultType="com.pokemon.pokemon.pokeDex.PokedexDTO">
         <choose>
             <when test="generation == 8">
-                SELECT * FROM gen8
+                SELECT * FROM gen8 order by region_no
             </when>
             <when test="generation == 9">
-                SELECT * FROM gen9
+                SELECT * FROM gen9 order by region_no
             </when>
             <otherwise>
-                SELECT * FROM gen8
+                SELECT * FROM gen8 order by region_no
             </otherwise>
         </choose>
     </select>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './DamageColculator.css';
+import PokemonSelector from './PokemonSelector';
 
 const STAT_KEYS = ['hp', 'attack', 'defense', 'spAttack', 'spDefense', 'speed'];
 const STAT_LABELS = {
@@ -17,6 +18,7 @@ export default function DamageCalculator() {
   const [pokemonList, setPokemonList] = useState([]);
   const [attacker, setAttacker] = useState(null);
   const [defender, setDefender] = useState(null);
+
 
   // 스탯 상태 관리
   const initializeStats = () => {
@@ -134,12 +136,12 @@ export default function DamageCalculator() {
         {/* 공격자 */}
         <div className="panel attacker">
           <h3>공격자</h3>
-          <select onChange={(e) => handleSelectPokemon(e.target.value, true)}>
-            <option value="">-- 포켓몬 선택 --</option>
-            {pokemonList.map(p => (
-              <option key={p.id} value={p.id}>{p.nameKor}</option>
-            ))}
-          </select>
+          <PokemonSelector
+            generation={generation}
+            handleSelectPokemon={handleSelectPokemon}
+            isAttacker={true}
+          />
+
           {attacker && (
             <>
               <img src={attacker.imageUrl} alt={attacker.nameKor} className="pokemon-image" />
@@ -162,12 +164,11 @@ export default function DamageCalculator() {
         {/* 수비자 */}
         <div className="panel defender">
           <h3>수비자</h3>
-          <select onChange={(e) => handleSelectPokemon(e.target.value, false)}>
-            <option value="">-- 포켓몬 선택 --</option>
-            {pokemonList.map(p => (
-              <option key={p.id} value={p.id}>{p.nameKor}</option>
-            ))}
-          </select>
+          <PokemonSelector
+            generation={generation}
+            handleSelectPokemon={handleSelectPokemon}
+            isAttacker={false}
+          />
           {defender && (
             <>
               <img src={defender.imageUrl} alt={defender.nameKor} className="pokemon-image" />
