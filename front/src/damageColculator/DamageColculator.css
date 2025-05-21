@@ -101,3 +101,58 @@
 .stat-row select {
   width: 60px;
 }
+
+.move-selector-container {
+  margin: 20px 0;
+  font-family: sans-serif;
+}
+
+.move-selector {
+  position: relative;
+  width: 300px;
+}
+
+.move-selector input {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.move-dropdown {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 4px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  list-style: none;
+  padding: 0;
+}
+
+.move-dropdown li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.move-dropdown li:hover {
+  background-color: #f0f0f0;
+}
+
+.no-match {
+  padding: 8px;
+  color: gray;
+  text-align: center;
+}
+
+.move-info {
+  margin-top: 20px;
+  background-color: #f9f9ff;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}

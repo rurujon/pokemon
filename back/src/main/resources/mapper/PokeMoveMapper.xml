@@ -8,8 +8,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <insert id="insertMove" parameterType="com.pokemon.pokemon.pokeMove.PokeMoveDTO">
         INSERT INTO pokemon_move (id, name_eng, name_kor, power, accuracy, pp, type, damage_class)
-        VALUES (#{id}, #{nameEng}, #{nameKor}, #{power}, #{accuracy}, #{pp}, #{type}, #{damageClass})
+        VALUES (#{id}, #{nameEng, jdbcType=VARCHAR}, #{nameKor, jdbcType=VARCHAR}, #{power, jdbcType=INTEGER}, #{accuracy, jdbcType=INTEGER}, #{pp, jdbcType=INTEGER}, #{type, jdbcType=VARCHAR}, #{damageClass, jdbcType=VARCHAR})
     </insert>
+
+    <select id="selectAllMoves" resultType="com.pokemon.pokemon.pokeMove.PokeMoveDTO">
+
+        Select * from pokemon_move order by id
+
+    </select>
 
 
 </mapper>

@@ -35,6 +35,8 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 	runtimeOnly 'com.oracle.database.jdbc:ojdbc8'
+
+	implementation 'org.json:json:20230227' // 버전은 최신으로 지정
 }
 
 tasks.named('test') {

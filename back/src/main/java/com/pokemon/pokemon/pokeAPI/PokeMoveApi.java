@@ -1,53 +1,92 @@
 package com.pokemon.pokemon.pokeAPI;
 
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.http.ResponseEntity;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.pokemon.pokemon.pokeMove.PokeMoveDTO;
 
+import org.json.JSONObject;
+import org.json.JSONArray;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Slf4j
 @Service
 public class PokeMoveApi {
 
-        private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate = new RestTemplate();
+    private final String BASE_URL = "https://pokeapi.co/api/v2/move";
 
-    public PokeMoveDTO fetchMoveFromApi(int id) {
-        String url = "https://pokeapi.co/api/v2/move/" + id;
-        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
+    public List<PokeMoveDTO> fetchAllMoves() {
+        List<PokeMoveDTO> moveList = new ArrayList<>();
 
-        if (response.getStatusCode().is2xxSuccessful()) {
-            Map data = response.getBody();
-            if (data == null) return null;
+        try {
+            // 1. 전체 move 목록 가져오기
+            String url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
+                    .queryParam("limit", 1000)
+                    .queryParam("offset", 0)
+                    .toUriString();
 
-            PokeMoveDTO move = new PokeMoveDTO();
-            move.setId((Integer) data.get("id"));
-            move.setNameEng((String) data.get("name"));
-            move.setPower((Integer) data.get("power"));
-            move.setAccuracy((Integer) data.get("accuracy"));
-            move.setPp((Integer) data.get("pp"));
+            JSONObject response = new JSONObject(restTemplate.getForObject(url, String.class));
+            JSONArray results = response.getJSONArray("results");
 
-            Map type = (Map) data.get("type");
-            move.setType((String) type.get("name"));
+            // 2. 각 move 상세 정보 가져오기
+            for (int i = 0; i < results.length(); i++) {
+                JSONObject moveSummary = results.getJSONObject(i);
+                String moveUrl = moveSummary.getString("url");
 
-            Map damageClass = (Map) data.get("damage_class");
-            move.setDamageClass((String) damageClass.get("name"));
+                try {
+                    JSONObject moveDetail = new JSONObject(restTemplate.getForObject(moveUrl, String.class));
+                    PokeMoveDTO move = parseMove(moveDetail);
+                    moveList.add(move);
 
-            List<Map> names = (List<Map>) data.get("names");
-            for (Map nameEntry : names) {
-                Map lang = (Map) nameEntry.get("language");
-                if ("ko".equals(lang.get("name"))) {
-                    move.setNameKor((String) nameEntry.get("name"));
-                    break;
+                    // 속도 조절 (API 제한 대비)
+                    Thread.sleep(100);
+                } catch (Exception e) {
+                    log.warn("Failed to fetch move detail from: " + moveUrl, e);
                 }
             }
-
-            return move;
+        } catch (Exception e) {
+            log.error("Failed to fetch move list", e);
         }
 
-        return null;
+        return moveList;
     }
-    
+
+    private PokeMoveDTO parseMove(JSONObject moveDetail) {
+        PokeMoveDTO move = new PokeMoveDTO();
+
+        move.setId(moveDetail.getInt("id"));
+        move.setNameEng(moveDetail.getString("name"));
+        move.setPower(moveDetail.isNull("power") ? null : moveDetail.getInt("power"));
+        move.setAccuracy(moveDetail.isNull("accuracy") ? null : moveDetail.getInt("accuracy"));
+        move.setPp(moveDetail.isNull("pp") ? null : moveDetail.getInt("pp"));
+
+        // 타입
+        move.setType(moveDetail.getJSONObject("type").getString("name"));
+
+        // 물리/특수/변화 분류
+        move.setDamageClass(moveDetail.getJSONObject("damage_class").getString("name"));
+
+        // 한국어 이름 찾기
+        JSONArray names = moveDetail.getJSONArray("names");
+        String nameKor = null;
+        for (int j = 0; j < names.length(); j++) {
+            JSONObject nameObj = names.getJSONObject(j);
+            if ("ko".equals(nameObj.getJSONObject("language").getString("name"))) {
+                move.setNameKor(nameObj.getString("name"));
+                nameKor = nameObj.getString("name");  // ✅ 값을 변수에 저장만 함
+                break;
+            }
+        }
+
+        // 한글 이름이 없으면 영문 이름으로 대체
+        move.setNameKor(nameKor != null ? nameKor : move.getNameEng());
+
+        return move;
+    }
 }
