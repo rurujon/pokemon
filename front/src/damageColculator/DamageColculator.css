@@ -159,3 +159,11 @@
   border-radius: 6px;
   border: 1px solid #ddd;
 }
+
+.field-effects {
+  margin-bottom: 1em;
+}
+.field-checkboxes label {
+  display: inline-block;
+  margin-right: 12px;
+}
