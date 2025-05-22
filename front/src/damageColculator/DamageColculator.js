@@ -10,7 +10,7 @@ const STAT_LABELS = {
   defense: '방어',
   spAttack: '특공',
   spDefense: '특방',
-  speed: '스피드'
+  speed: '스핏'
 };
 
 const typeEffectiveness = {
@@ -50,15 +50,11 @@ export default function DamageCalculator() {
   const [query, setQuery] = useState('');
   const [selectedMove, setSelectedMove] = useState(null);
 
-  //테라스탈 타입 변경
-  const [attackerTeraType, setAttackerTeraType] = useState('');
-  const [defenderTeraType, setDefenderTeraType] = useState('');
-
 
   // 스탯 상태 관리
   const initializeStats = () => {
     return STAT_KEYS.reduce((acc, key) => {
-      acc[key] = { iv: 31, ev: 252, nature: 1.0 };
+      acc[key] = { iv: 31, ev: 0, nature: 1.0, rank: 0 };
       return acc;
     }, {});
   };
@@ -114,8 +110,6 @@ export default function DamageCalculator() {
       });
   };
 
-  
-
   const handleStatChange = (who, stat, field, value) => {
     const updater = who === 'attacker' ? setAttackerStats : setDefenderStats;
     updater(prev => ({
@@ -155,6 +149,10 @@ export default function DamageCalculator() {
   const attackerRealStats = getRealStats(attacker, attackerStats);
   const defenderRealStats = getRealStats(defender, defenderStats);
 
+  //테라스탈 타입 변경
+  const [attackerTeraType, setAttackerTeraType] = useState('');
+  const [defenderTeraType, setDefenderTeraType] = useState('');
+
   //방어자 타입. 테라스탈 적용시 단일 타입화.
   function getTypeMultiplier(moveType, defenderType1, defenderType2 = null, terastalType = null) {
     const typeChart = typeEffectiveness[moveType.toLowerCase()];
@@ -187,6 +185,12 @@ export default function DamageCalculator() {
     return 1.0;
   }
 
+  //스탯 랭크 업 계산
+  const getRankMultiplier = (rank) => {
+    if (rank >= 0) return (2 + rank) / 2;
+    return 2 / (2 - rank);
+  };
+
   //데미지 계산식. 뭐가 이리 복잡해.
   const calculateDamage = (attacker, defender, selectedMove, attackerStats, defenderStats) => {
     if (!attacker || !defender || !selectedMove) return 0;
@@ -197,8 +201,15 @@ export default function DamageCalculator() {
     const attackerRealStats = getRealStats(attacker, attackerStats);
     const defenderRealStats = getRealStats(defender, defenderStats);
 
-    const attackStat = isPhysical ? attackerRealStats.attack : attackerRealStats.spAttack;
-    const defenseStat = isPhysical ? defenderRealStats.defense : defenderRealStats.spDefense;
+    const attackRank = isPhysical ? attackerStats.attack.rank : attackerStats.spAttack.rank;
+    const defenseRank = isPhysical ? defenderStats.defense.rank : defenderStats.spDefense.rank;
+
+    const attackStat = Math.floor(
+      (isPhysical ? attackerRealStats.attack : attackerRealStats.spAttack) * getRankMultiplier(attackRank)
+    );
+    const defenseStat = Math.floor(
+      (isPhysical ? defenderRealStats.defense : defenderRealStats.spDefense) * getRankMultiplier(defenseRank)
+    );
 
     const baseDamage = (((2 * 50 / 5 + 2) * power * attackStat / defenseStat) / 50) + 2;
 
@@ -222,31 +233,46 @@ export default function DamageCalculator() {
     return totalDamage;
   };
 
-  const damage = calculateDamage(attacker, defender, selectedMove, attackerStats, defenderStats);
+  const MaxDamage = calculateDamage({ ...attacker, terastalType: attackerTeraType }, { ...defender, terastalType: defenderTeraType }, selectedMove, attackerStats, defenderStats);
+  const MinDamage = Math.floor(MaxDamage * 0.85);
 
   const renderStatInputs = (who, stats, pokemon) => {
     return STAT_KEYS.map((key) => (
       <div key={key} className="stat-row">
-        <h4>{STAT_LABELS[key]} {pokemon ? pokemon[key] : '-'}</h4>
+        <h4>{STAT_LABELS[key]} <br/> {pokemon ? pokemon[key] : '-'}</h4>
         <label>IV
+          <br/>
           <input type="number" min="0" max="31"
             value={stats[key].iv}
             onChange={(e) => handleStatChange(who, key, 'iv', e.target.value)} />
         </label>
         <label>EV
+          <br/>
           <input type="number" min="0" max="252"
             value={stats[key].ev}
             onChange={(e) => handleStatChange(who, key, 'ev', e.target.value)} />
         </label>
         <label>성격
+          <br/>
           <select value={stats[key].nature}
             onChange={(e) => handleStatChange(who, key, 'nature', e.target.value)}>
             <option value={1.0}>없음</option>
             <option value={1.1}>+10%</option>
             <option value={0.9}>-10%</option>
           </select>
+        </label>        
+        <p><label>실능치</label>
+          <br/>
+         {pokemon ? calcStat(pokemon[key], stats[key].iv, stats[key].ev, 50, stats[key].nature, key) : '-'}
+         </p>
+        <label>랭크
+          <br/>
+          <select value={stats[key].rank} onChange={(e) => handleStatChange(who, key, 'rank', e.target.value)}>
+            {Array.from({ length: 13 }, (_, i) => i - 6).map(val => (
+              <option key={val} value={val}>{val}</option>
+            ))}
+          </select>
         </label>
-        <p><label>실능치</label> {pokemon ? calcStat(pokemon[key], stats[key].iv, stats[key].ev, 50, stats[key].nature, key) : '-'}</p>
       </div>
     ));
   };
@@ -338,7 +364,7 @@ export default function DamageCalculator() {
           </div>          
           
           {attacker && defender ? (
-            <p><strong>예상 데미지: {damage}</strong></p>
+            <p><strong>예상 데미지: {MinDamage} ~ {MaxDamage}</strong></p>
           ) : (
             <p className="placeholder">양쪽 포켓몬을 선택하세요</p>
           )}

@@ -93,11 +93,14 @@
 }
 
 .stat-row label {
-  min-width: 70px;
+  min-width: 50px;
   font-weight: bold;
 }
 
-.stat-row input,
+.stat-row input{
+  width: 30px;
+}
+
 .stat-row select {
   width: 60px;
 }
