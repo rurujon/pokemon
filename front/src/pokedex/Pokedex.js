@@ -52,8 +52,8 @@ function Pokedex() {
     <div className="pokedex-wrapper">
       <h2>포켓몬 도감</h2>
       <p className="small-text">
-          ※ pokeApi 에서는 지역별 포켓몬 리스트를 완벽하게 제공하지 않음.<br/>
-          ※ DLC로 추가되는 포켓몬 목록을 자동으로 깔끔하게 필터링할 방법이 당장은 없음.
+          ※ pokeApi 에서는 모든 포켓몬 정보를 제공하나, 지역별 포켓몬 리스트는 완벽하게 제공하지 않음.<br/>
+          ※ DLC로 추가되는 포켓몬 목록을 자동으로 깔끔하게 필터링할 방법이 여의치가 않음.
       </p>
 
       <div className="tab-buttons">
