@@ -415,7 +415,7 @@ export default function DamageCalculator() {
     if (minHits === maxHits) {
       return <p>확정 {minHits}타</p>;
     } else {
-      return <p>난수 {minHits}~{maxHits}타</p>;
+      return <p>난수 {minHits}타</p>;
     }
   };
 
