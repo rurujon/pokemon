@@ -10,6 +10,10 @@ function Pokedex() {
   const [message, setMessage] = useState('');
   const [selectedPokemon, setSelectedPokemon] = useState(null);
 
+  const [searchKeyword, setSearchKeyword] = useState('');
+
+  const [selectedType, setSelectedType] = useState('');
+
   useEffect(() => {
     const fetchPokedex = async () => {
       try {
@@ -35,9 +39,22 @@ function Pokedex() {
     }
   };
 
+  const filteredPokemonList = pokemonList.filter(pokemon => {
+    const matchesName = pokemon.nameKor.toLowerCase().includes(searchKeyword.toLowerCase());
+    const matchesType = !selectedType ||
+      pokemon.type1.toLowerCase() === selectedType ||
+      (pokemon.type2 && pokemon.type2.toLowerCase() === selectedType);
+
+    return matchesName && matchesType;
+  });
+
   return (
     <div className="pokedex-wrapper">
       <h2>포켓몬 도감</h2>
+      <p className="small-text">
+          ※ pokeApi 에서는 지역별 포켓몬 리스트를 완벽하게 제공하지 않음.<br/>
+          ※ DLC로 추가되는 포켓몬 목록을 자동으로 깔끔하게 필터링할 방법이 당장은 없음.
+      </p>
 
       <div className="tab-buttons">
         <button
@@ -59,8 +76,32 @@ function Pokedex() {
         {message && <div className="message">{message}</div>}
       </div>
 
+      <div className="type-filter">
+        {[
+          'fire', 'water', 'grass', 'electric', 'ice', 'fighting', 'poison', 'ground', 'flying',
+          'psychic', 'bug', 'rock', 'ghost', 'dark', 'dragon', 'steel', 'fairy', 'normal'
+        ].map(type => (
+          <button
+            key={type}
+            className={`type-button type ${selectedType.includes(type) ? 'selected' : ''} ${type}`}
+            onClick={() => setSelectedType(selectedType === type ? '' : type)}
+          >
+            {type}
+          </button>
+        ))}
+      </div>
+
+      <div className="search-box">
+        <input
+          type="text"
+          placeholder="포켓몬 이름 검색"
+          value={searchKeyword}
+          onChange={(e) => setSearchKeyword(e.target.value)}
+        />
+      </div>
+
       <div className="pokedex-container">
-        {pokemonList.map((pokemon) => (
+        {filteredPokemonList.map((pokemon) => (
           <div
             key={pokemon.id}
             className={`pokedex-card ${selectedPokemon?.id === pokemon.id ? 'selected' : ''}`}

@@ -26,11 +26,26 @@
 }
 
 .explanation-box {
-  background-color: #fff8dc;
-  border: 1px solid #f0e68c;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
   padding: 16px;
-  margin-bottom: 24px;
-  border-radius: 6px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.toggle-button {
+  margin-top: 10px;
+  background-color: #eee;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.details {
+  margin-top: 16px;
+  background-color: #fff;
+  padding: 12px;
 }
 
 .explanation-box h2 {

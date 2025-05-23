@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './DamageColculator.css';
 import PokemonSelector from './PokemonSelector';
+import gigantamaxData from './gigantamaxData.json'
 
 const STAT_KEYS = ['hp', 'attack', 'defense', 'spAttack', 'spDefense', 'speed'];
 const STAT_LABELS = {
@@ -40,7 +41,32 @@ const POKEMON_TYPES = [
   'dark', 'steel', 'fairy'
 ];
 
+const DYNAMAX_MOVE_NAMES = {
+  normal: '다이어택',
+  fire: '다이번',
+  water: '다이스트림',
+  grass: '다이그래스',
+  electric: '다이썬더',
+  ice: '다이아이스',
+  fighting: '다이너클',
+  poison: '다이애시드',
+  ground: '다이어스',
+  flying: '다이제트',
+  psychic: '다이사이코',
+  bug: '다이웜',
+  rock: '다이록',
+  ghost: '다이할로우',
+  dragon: '다이드라군',
+  dark: '다이아크',
+  steel: '다이스틸',
+  fairy: '다이페어리'
+};
+
+
 export default function DamageCalculator() {
+
+  const [showDetails, setShowDetails] = useState(false);
+
   const [generation, setGeneration] = useState('8');
   const [pokemonList, setPokemonList] = useState([]);
   const [attacker, setAttacker] = useState(null);
@@ -53,6 +79,8 @@ export default function DamageCalculator() {
   const [attackerDynamax, setAttackerDynamax] = useState(false);
   const [defenderDynamax, setDefenderDynamax] = useState(false);
 
+  const [attackerGigantamax, setAttackerGigantamax] = useState(false); // NEW
+
   const handleGenerationChange = (gen) => {
     setGeneration(gen);
 
@@ -63,12 +91,20 @@ export default function DamageCalculator() {
       setDefenderTeraType('');
       setAttackerDynamax(false);
       setDefenderDynamax(false);
+      setAttackerGigantamax(false);
+      setSelectedMove(null);
+      setAttacker(null);
+      setDefender(null);
     } else if (gen === '9') {
       // 9세대용 초기화
       setAttackerTeraType('');
       setDefenderTeraType('');
       setAttackerDynamax(false);
       setDefenderDynamax(false);
+      setAttackerGigantamax(false);
+      setSelectedMove(null);
+      setAttacker(null);
+      setDefender(null);
     }
   };
 
@@ -280,6 +316,67 @@ export default function DamageCalculator() {
   const [defenderItemDamageReduce, setDefenderItemDamageReduce] = useState(1.0);
   const [defenderItemStatTarget, setDefenderItemStatTarget] = useState("defense");
 
+  //다이맥스 기술 위력 설정
+  const getDynamaxPower = (originalPower, type) => {
+  const isFightingOrPoison = ['fighting', 'poison'].includes(type);
+    if (originalPower <= 40) return isFightingOrPoison ? 70 : 90;
+    if (originalPower === 50) return isFightingOrPoison ? 75 : 100;
+    if (originalPower >= 55 && originalPower <= 60) return isFightingOrPoison ? 80 : 110;
+    if (originalPower >= 65 && originalPower <= 70) return isFightingOrPoison ? 85 : 120;
+    if (originalPower >= 75 && originalPower <= 100) return isFightingOrPoison ? 90 : 130;
+    if (originalPower >= 110 && originalPower <= 140) return isFightingOrPoison ? 95 : 140;
+    if (originalPower >= 150) return isFightingOrPoison ? 100 : 150;
+    return isFightingOrPoison ? 70 : 90; // fallback
+  };
+
+  const createDynamaxMove = (originalMove) => {
+    const power = getDynamaxPower(originalMove.power, originalMove.type);
+    const nameKor = DYNAMAX_MOVE_NAMES[originalMove.type] || '다이월';
+    return {
+      ...originalMove,
+      nameKor,
+      power,
+      // 다이맥스 기술은 항상 "physical" 또는 "special" 그대로 유지
+      // 추가 옵션 넣을 수도 있음 ex: isDynamax: true
+    };
+  }
+
+  // 거다이맥스 로직
+  const createGigantamaxMove = (originalMove, attackerName) => {
+
+    if (!originalMove) return null;
+
+    const gigaInfo = gigantamaxData[attackerName];
+    if (!gigaInfo) return null;
+
+    if (originalMove.type !== gigaInfo.type) return null;
+
+    return {
+      ...originalMove,
+      nameKor: gigaInfo.move,
+      power: gigaInfo.power,
+      description: gigaInfo.effective,
+    };
+  };
+
+  let moveToUse = null;
+
+  if (selectedMove) {
+    // 기술이 선택된 경우만 처리
+    if (attackerGigantamax) {
+      const gigaMove = createGigantamaxMove(selectedMove, attacker.nameKor);
+
+      if (gigaMove) {
+        moveToUse = gigaMove;
+      } else {
+        moveToUse = createDynamaxMove(selectedMove);
+      }
+    } else if (attackerDynamax) {
+      moveToUse = createDynamaxMove(selectedMove);
+    } else {
+      moveToUse = selectedMove;
+    }
+  }
 
   const calculateDamageRange = (
     attacker,
@@ -381,7 +478,7 @@ export default function DamageCalculator() {
   const { min: MinDamage, max: MaxDamage } = calculateDamageRange(
     { ...attacker, terastalType: attackerTeraType },
     { ...defender, terastalType: defenderTeraType },
-    selectedMove,
+    moveToUse,
     attackerStats,
     defenderStats,
     fieldState,
@@ -418,6 +515,8 @@ export default function DamageCalculator() {
       return <p>난수 {minHits}타</p>;
     }
   };
+
+  const realHPStat = (generation === '8' && defenderDynamax) ? defenderRealStats.hp * 2 : defenderRealStats.hp;
 
   const renderStatInputs = (who, stats, pokemon) => {
     return STAT_KEYS.map((key) => (
@@ -481,8 +580,73 @@ export default function DamageCalculator() {
       {/* 설명 */}
       <div className="explanation-box">
         <h2>결정력 계산식</h2>
+        <p className="small-text">
+          ※ 특성 정보와 도구 정보를 가져오는 것까진 가능하나, 이 중 결정력 계산식에 영향을 주는 특성/도구만을 필터링할 방법이 당장은 없음.<br/>
+          ※ 임시로 직접 특성 배율과 도구 배율을 지정할 수 있도록 설정. 계산식 자체는 구현 완료.
+        </p>
         <p><strong>결정력 = ((레벨 × 2 ÷ 5 + 2) × 기술 위력 × 공격 / 방어 ÷ 50) + 2</strong></p>
-        <p className="small-text">※ 여기에 날씨, 특성, 아이템, 타입 상성 등 다양한 배율이 적용됩니다.</p>
+        <p className="small-text">
+          ※ 여기에 날씨, 특성, 아이템, 타입 상성 등 다양한 배율이 적용됩니다.
+        </p>
+
+        <button onClick={() => setShowDetails(!showDetails)} className="toggle-button">
+          {showDetails ? "▲ 닫기" : "▼ 자세히 보기"}
+        </button>
+
+        {showDetails && (
+          <div className="details">
+            <h3>🟥 1. 공격력/방어력 증폭 계수 (Stage 변화)</h3>
+            <p>공격/특공/방어/특방 단계는 -6 ~ +6까지 변동하며, 각 단계는 계수로 환산됩니다.</p>
+            <pre>
+  +6: ×4.0   +5: ×3.5   +4: ×3.0  +3: ×2.5    +2: ×2.0    +1: ×1.5  <br/><br/>
+  -1: ×0.66  -2: ×0.5   -3: ×0.4  -4: ×0.33   -5: ×0.29   -6: ×0.25 
+            </pre>
+
+            <h3>🟥 2. 필드/상황 버프</h3>
+            <ul>
+              <li><strong>비바라기:</strong> 물 기술 위력 ×1.5 / 불 기술 위력 ×0.5</li>
+              <li><strong>쾌청:</strong> 불 기술 위력 ×1.5 / 물 기술 위력 ×0.5</li>
+              <li><strong>모래바람:</strong> 바위 타입 포켓몬 특방 ×1.5</li>
+              <li><strong>눈(9세대):</strong> 얼음 타입 포켓몬 방어 ×1.5</li>
+              <li><strong>리플렉터:</strong> 물리 기술 피해 절반</li>
+              <li><strong>빛의장막:</strong> 특수 기술 피해 절반</li>
+              <li><strong>그 외 기타 등등</strong></li>
+            </ul>
+
+            <h3>🟥 3. STAB (타입 일치 보너스)</h3>
+            <p>포켓몬의 타입과 같은 타입의 기술을 사용시 기본 1.5배, 특성 <strong>적응력</strong>일 경우 2.0배</p>
+
+            <h3>🟥 4. 타입 상성</h3>
+            <p>타입 상성에 따라 0.25 ~ 4배까지 증폭됩니다.</p>
+
+            <h3>🟥 5. 급소 (Critical Hit)</h3>
+            <p>기본 ×1.5배 (6세대 이전은 2.0배)</p>
+
+            <h3>🟥 6. 랜덤 계수</h3>
+            <p>0.85 ~ 1.00 사이의 난수로 데미지 편차 발생</p>
+
+            <h3>🟥 7. 특성 보정</h3>
+            <ul>
+              <li>순수한힘, 천하장사: 포켓몬 공격력 ×2.0</li>
+              <li>철주먹: 펀치 계열 기술 위력 ×1.2</li>
+              <li>필터, 하드록: 받은 데미지 ×0.75</li>
+              <li>페어리오라/다크오라: 특정 타입 기술 위력 ×1.33</li>
+              <li>재앙시리즈: 상대 특정 능력치 ×0.75</li>
+              <li>그 외 기타 등등</li>
+            </ul>
+
+            <h3>🟥 8. 아이템 보정</h3>
+            <ul>
+              <li>생명의구슬: 최종 데미지 ×1.3</li>
+              <li>구애머리띠/안경: 물리/특수 ×1.5</li>
+              <li>반감열매: 피해 절반</li>
+              <li>그 외 기타 등등</li>
+            </ul>
+
+            <h3>🟥 9. 기술 조건 보정</h3>
+            <p>연속기술, 2턴 기술, 상대 상태 조건에 따라 위력이 변동됩니다.</p>
+          </div>
+        )}
       </div>
 
       <div>
@@ -522,8 +686,24 @@ export default function DamageCalculator() {
                   <input
                     type="checkbox"
                     checked={attackerDynamax}
-                    onChange={(e) => setAttackerDynamax(e.target.checked)}
+                    onChange={(e) => {
+                      setAttackerDynamax(e.target.checked);
+                      if (e.target.checked) setAttackerGigantamax(false); // 상호 배제
+                    }}
                   />
+                  {gigantamaxData.hasOwnProperty(attacker.nameKor) && (
+                    <>
+                      <label>공격자 거다이맥스 여부: </label>
+                      <input
+                        type="checkbox"
+                        checked={attackerGigantamax}
+                        onChange={(e) => {
+                          setAttackerGigantamax(e.target.checked);
+                          if (e.target.checked) setAttackerDynamax(false); // 상호 배제
+                        }}
+                      />
+                    </>
+                  )}
                 </div>
               )}
               {renderStatInputs('attacker', attackerStats, attacker)}
@@ -602,10 +782,15 @@ export default function DamageCalculator() {
 
             {selectedMove && (
               <div className="move-info">
-                <p><strong>선택 기술:</strong> {selectedMove.nameKor}</p>
                 <p>
-                  속성: {selectedMove.type} / 분류: {selectedMove.damageClass} / 위력: {selectedMove.power}
+                  <strong>선택 기술:</strong> {moveToUse.nameKor}
                 </p>
+                <p>
+                  속성: {moveToUse.type} / 분류: {moveToUse.damageClass} / 위력: {moveToUse.power}
+                </p>
+                {moveToUse.description && (
+                  <p>효과: {moveToUse.description}</p>
+                )}
               </div>
             )}
           </div>          
@@ -614,6 +799,10 @@ export default function DamageCalculator() {
             <>
               <p>
                 <strong>예상 데미지: {MinDamage} ~ {MaxDamage}</strong>
+              </p>
+
+              <p>
+                <strong>상대 체력: {realHPStat}</strong>
               </p>
 
               {/* 데미지와 상대 HP 비교 후 타수 계산 및 출력 */}

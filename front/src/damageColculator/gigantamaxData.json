@@ -1,0 +1,200 @@
+{
+  "이상해꽃": {
+    "move": "거다이편달",
+    "type": "grass",
+    "power": 160,
+    "effective": "4턴 동안 비풀 type 포켓몬에게 지속 피해를 입힌다."
+  },
+  "리자몽": {
+    "move": "거다이옥염",
+    "type": "fire",
+    "power": 160,
+    "effective": "4턴 동안 비불꽃 type 포켓몬에게 지속 피해를 입힌다."
+  },
+  "거북왕": {
+    "move": "거다이포격",
+    "type": "water",
+    "power": 160,
+    "effective": "4턴 동안 비물 type 포켓몬에게 지속 피해를 입힌다."
+  },
+  "버터플": {
+    "move": "거다이고혹",
+    "type": "bug",
+    "power": 130,
+    "effective": "상대 전원을 독, 마비, 수면 중 하나의 상태 이상으로 만든다."
+  },
+  "피카츄": {
+    "move": "거다이만뢰",
+    "type": "electric",
+    "power": 160,
+    "effective": "상대 전원을 마비 상태로 만든다."
+  },
+  "나옹": {
+    "move": "거다이금화",
+    "type": "normal",
+    "power": 100,
+    "effective": "상대 전원을 혼란 상태로 만들고, 전투 후 돈을 획득한다."
+  },
+  "괴력몬": {
+    "move": "거다이회심격",
+    "type": "fighting",
+    "power": 100,
+    "effective": "자신과 아군의 급소율을 1단계 상승시킨다."
+  },
+  "팬텀": {
+    "move": "거다이환영",
+    "type": "ghost",
+    "power": 130,
+    "effective": "상대가 교체하거나 도망칠 수 없게 만든다."
+  },
+  "킹크랩": {
+    "move": "거다이포말",
+    "type": "water",
+    "power": 130,
+    "effective": "상대의 스피드를 2단계 낮춘다."
+  },
+  "라프라스": {
+    "move": "거다이선율",
+    "type": "ice",
+    "power": 130,
+    "effective": "5턴 동안 자신과 아군이 받는 물리 및 특수 피해를 감소시킨다."
+  },
+  "이브이": {
+    "move": "거다이포옹",
+    "type": "normal",
+    "power": 100,
+    "effective": "상대가 자신과 성별이 다를 경우, 상대를 헤롱헤롱 상태로 만든다."
+  },
+  "잠만보": {
+    "move": "거다이재생",
+    "type": "normal",
+    "power": 150,
+    "effective": "사용한 베리를 확률적으로 다시 획득한다."
+  },
+  "더스트나": {
+    "move": "거다이악취",
+    "type": "poison",
+    "power": 90,
+    "effective": "상대를 독 상태로 만든다."
+  },
+  "멜메탈": {
+    "move": "거다이융격",
+    "type": "steel",
+    "power": 160,
+    "effective": "상대가 같은 기술을 연속으로 사용할 수 없게 만든다."
+  },
+  "고릴타": {
+    "move": "거다이난타",
+    "type": "grass",
+    "power": 160,
+    "effective": "상대의 특성에 관계없이 공격이 통한다."
+  },
+  "에이스번": {
+    "move": "거다이화염구",
+    "type": "fire",
+    "power": 160,
+    "effective": "상대의 특성에 관계없이 공격이 통한다."
+  },
+  "인텔리레온": {
+    "move": "거다이저격",
+    "type": "water",
+    "power": 160,
+    "effective": "상대의 특성에 관계없이 공격이 통한다."
+  },
+  "아머까오": {
+    "move": "거다이풍격",
+    "type": "flying",
+    "power": 130,
+    "effective": "리플렉터, 라이트 스크린, 스텔스록, 스파이크, 전기장 등의 effective를 제거한다."
+  },
+  "이올브": {
+    "move": "거다이천도",
+    "type": "psychic",
+    "power": 130,
+    "effective": "5턴 동안 중력을 강화하여 회피율을 낮추고, 공중에 떠 있는 포켓몬을 지상으로 끌어내린다."
+  },
+  "갈가부기": {
+    "move": "거다이암진",
+    "type": "water",
+    "power": 130,
+    "effective": "상대 필드에 스텔스록을 설치한다."
+  },
+  "석탄산": {
+    "move": "거다이분석",
+    "type": "rock",
+    "power": 130,
+    "effective": "4턴 동안 비바위 type 포켓몬에게 지속 피해를 입힌다."
+  },
+  "애프룡": {
+    "move": "거다이산격",
+    "type": "grass",
+    "power": 130,
+    "effective": "자신과 아군의 상태 이상을 회복한다."
+  },
+  "단지래플": {
+    "move": "거다이감로",
+    "type": "grass",
+    "power": 130,
+    "effective": "상대의 회피율을 1단계 낮춘다."
+  },
+  "사다이사": {
+    "move": "거다이사진",
+    "type": "ground",
+    "power": 130,
+    "effective": "상대를 모래지옥 상태로 만들어 4~5턴 동안 지속 피해를 입힌다."
+  },
+  "스트린더": {
+    "move": "거다이감전",
+    "type": "electric",
+    "power": 160,
+    "effective": "상대를 마비 또는 독 상태로 만든다."
+  },
+  "다태우지네": {
+    "move": "거다이백화",
+    "type": "fire",
+    "power": 160,
+    "effective": "상대를 불꽃소용돌이 상태로 만들어 4~5턴 동안 지속 피해를 입힌다."
+  },
+  "브리무음": {
+    "move": "거다이천벌",
+    "type": "fairy",
+    "power": 130,
+    "effective": "상대를 혼란 상태로 만든다."
+  },
+  "오롱털": {
+    "move": "거다이수마",
+    "type": "dark",
+    "power": 130,
+    "effective": "상대를 졸음 상태로 만들어 다음 턴에 잠들게 한다."
+  },
+  "마휘핑": {
+    "move": "거다이단원",
+    "type": "fairy",
+    "power": 130,
+    "effective": "자신과 아군의 HP를 회복한다."
+  },
+  "대왕끼리동": {
+    "move": "거다이강철진",
+    "type": "steel",
+    "power": 130,
+    "effective": "상대 필드에 스파이크를 설치한다."
+  },
+  "두랄루돈": {
+    "move": "거다이감쇠",
+    "type": "dragon",
+    "power": 130,
+    "effective": "상대가 마지막으로 사용한 기술의 PP를 감소시킨다."
+  },
+  "우라오스(일격)": {
+    "move": "거다이일격",
+    "type": "dark",
+    "power": 130,
+    "effective": "상대의 보호 effective를 무시하고 공격한다."
+  },
+  "우라오스(연격)": {
+    "move": "거다이연격",
+    "type": "water",
+    "power": 130,
+    "effective": "상대의 보호 effective를 무시하고 공격한다."
+  }
+}
