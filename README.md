@@ -31,6 +31,7 @@ PokéAPI의 데이터를 기반으로 동작합니다.
 ## 🖼️ 프로젝트 화면
 
 ![Image](https://github.com/user-attachments/assets/2fc733aa-0714-4441-9c6e-55244c587285)
+
 *8세대/9세대 도감 리스트*
 
 - PokeApi에서 세대별 포켓몬 목록을 가져와 DB에 저장.
@@ -40,10 +41,12 @@ PokéAPI의 데이터를 기반으로 동작합니다.
 
 
 ![Image](https://github.com/user-attachments/assets/6e6d594d-5879-4df2-a5fa-40d65a5a2cb3)
+
 *결정력 계산기*
 
 
 ![Image](https://github.com/user-attachments/assets/20d8aea1-5cbe-41f0-97d3-3ca15c9857ab)
+
 *실제 적용 예시*
 
 - 8세대와 9세대의 결정력 계산기를 제공.
